@@ -68,6 +68,30 @@ namespace CodeFirstApproach
                             Console.WriteLine("DeletedRecord ");
                         break;
                     }
+                case 5:
+                    {
+                        Console.WriteLine("Enter id to edit");
+                        int id = Byte.Parse(Console.ReadLine());
+                        Console.WriteLine("Enter new Batch");
+                        string batch = Console.ReadLine();
+                        Console.WriteLine("Enter new Marks");
+                        int marks = int.Parse(Console.ReadLine());
+                        Console.WriteLine("Enter new Address");
+                        string address = Console.ReadLine();
+                        Student temp = new Student()
+                        {
+                             
+                            Address = address,
+                            Batch = batch,
+                            Marks = marks
+                        };
+                        bool flag = EditRecord(id, temp);
+                        if (flag == false)
+                            Console.WriteLine("No record with this id");
+                        else
+                            Console.WriteLine("DeletedRecord ");
+                        break;
+                    }
 
             }
         }
@@ -91,7 +115,7 @@ namespace CodeFirstApproach
             var record = db.Students.Where(x => x.Name.Contains(name)).FirstOrDefault();
             return record;
         }
-        static bool DeleteRecord(int id)
+        static bool EditRecord(int id, Student temp)
         {
             if (db.Students.Find(id) == null)
             {
@@ -101,15 +125,29 @@ namespace CodeFirstApproach
             else
             {
                 Student student = db.Students.Find(id);
-                db.Students.Remove(student);
+                student.Batch = temp.Batch;
+                student.Marks = temp.Marks;
+                student.Address = temp.Address;
                 db.SaveChanges();
                 return true;
             }
-            //static void InsertRecord()
-            //{
-            //    db.Students.Add(new Models.Student() { Name = "jatin", Batch = "B001", Address = "Delhi", Marks = 90 });
-            //    db.SaveChanges();
-            //}
+        }
+            static bool DeleteRecord(int id)
+            {
+                if (db.Students.Find(id) == null)
+                {
+                    return false;
+
+                }
+                else
+                {
+                    Student student = db.Students.Find(id);
+                    db.Students.Remove(student);
+                    db.SaveChanges();
+                    return true;
+                }
+                
+            }
         }
     }
-}
+
